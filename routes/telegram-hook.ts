@@ -15,6 +15,7 @@ export default eventHandler(async (evt) => {
   } else if (query.secret_hash === SECRET_HASH) {
     const body = await readBody(evt)
     await bot.handleUpdate(body)
+    return 'OK'
   }
 
   setResponseStatus(evt, 403, 'Forbidden')
