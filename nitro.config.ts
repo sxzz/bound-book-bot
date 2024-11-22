@@ -3,8 +3,6 @@ export default defineNitroConfig({
     tsConfig: {
       compilerOptions: {
         strict: true,
-        noEmit: true,
-        moduleResolution: 'bundler',
       },
     },
   },
