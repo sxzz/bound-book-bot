@@ -1,20 +1,28 @@
+import { z } from 'zod'
 import { bot } from '~/src'
 import { parseMsgUrl, sendJson } from '~/src/utils'
 
-export default eventHandler(async (evt) => {
-  const query = getQuery(evt)
+const schema = z
+  .object({
+    url: z.coerce.string().url(),
+  })
+  .or(
+    z.object({
+      chat_id: z.coerce.number().int(),
+      msg_id: z.coerce.number().int().positive(),
+    }),
+  )
 
-  const url = query.url
-  let chatId: string
+export default eventHandler(async (evt) => {
+  const query = await getValidatedQuery(evt, schema.parse)
+
+  let chatId: number
   let msgId: number
 
-  if (typeof url === 'string') {
-    ;[chatId, msgId] = parseMsgUrl(url)
+  if ('url' in query) {
+    ;[chatId, msgId] = parseMsgUrl(query.url)
   } else {
-    if (typeof query.chat_id !== 'string') return 'invalid chat_id'
-    chatId = query.chat_id
-    if (typeof query.msg_id !== 'string') return 'invalid msg_id'
-    msgId = +query.msg_id
+    ;({ chat_id: chatId, msg_id: msgId } = query)
   }
 
   try {

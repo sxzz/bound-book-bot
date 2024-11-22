@@ -1,10 +1,13 @@
+import { z } from 'zod'
 import { sendJson } from '~/src/utils'
 import { bot } from '../src'
 
+const schema = z.object({
+  chat_id: z.coerce.number().int(),
+})
+
 export default eventHandler(async (evt) => {
-  const query = getQuery(evt)
-  const chatId = query.chat_id
-  if (typeof chatId !== 'string') return 'invalid chat_id'
+  const { chat_id: chatId } = await getValidatedQuery(evt, schema.parse)
 
   try {
     const result = await bot.telegram.leaveChat(chatId)
