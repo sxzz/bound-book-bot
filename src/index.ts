@@ -1,5 +1,6 @@
 import { Telegraf } from 'telegraf'
 import { BOT_TOKEN } from './env'
+import { fingerprint } from './fingerprint'
 import { post } from './post'
 import type { BotCommand } from 'telegraf/types'
 
@@ -11,15 +12,13 @@ bot.help((ctx) => ctx.reply('在引用回复「投稿」！'))
 bot.hears('投稿', post)
 bot.command('post', post)
 
-bot.hears('按个指纹', async (ctx) => {
-  await ctx.replyWithMarkdownV2(
-    `\`\`\`\n${JSON.stringify(ctx.message, undefined, 2)}\n\`\`\``,
-  )
-})
+bot.hears('按个指纹', fingerprint)
+bot.command('fingerprint', fingerprint)
 
 export const commands: BotCommand[] = [
   { command: 'start', description: '使用说明' },
   { command: 'post', description: '投稿' },
+  { command: 'command', description: '按个指纹' },
 ]
 const helpMsg = commands
   .map(({ command, description }) => `/${command} - ${description}`)
