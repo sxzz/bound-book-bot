@@ -1,5 +1,6 @@
 import { getChannelIdByUser } from '../db'
 import { bot } from '../index'
+import emojis from './emojis.json'
 import type { Context } from 'telegraf'
 import type { Message, Update } from 'telegraf/types'
 
@@ -37,7 +38,7 @@ export async function post(
     )
 
     await bot.telegram.setMessageReaction(originalChatId, originalMsgId, [
-      { type: 'emoji', emoji: '🔥' },
+      { type: 'emoji', emoji: getRandomEmoji() },
     ])
   } catch (error) {
     console.error(error)
@@ -47,4 +48,8 @@ export async function post(
 
 function removeChannelIdPrefix(channelId: number) {
   return String(channelId).slice(4)
+}
+
+function getRandomEmoji(): any {
+  return emojis[Math.floor(Math.random() * emojis.length)]
 }
