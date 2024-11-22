@@ -18,7 +18,7 @@ bot.command('fingerprint', fingerprint)
 export const commands: BotCommand[] = [
   { command: 'start', description: '使用说明' },
   { command: 'post', description: '投稿' },
-  { command: 'command', description: '按个指纹' },
+  { command: 'fingerprint', description: '按个指纹' },
 ]
 const helpMsg = commands
   .map(({ command, description }) => `/${command} - ${description}`)
