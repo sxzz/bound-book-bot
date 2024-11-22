@@ -1,4 +1,4 @@
-import { getChannelMap } from './channel'
+import { getChannelMap } from './db'
 import { bot } from './index'
 import type { Context } from 'telegraf'
 import type { Message, Update } from 'telegraf/types'
@@ -15,6 +15,11 @@ export async function post(
   }
 
   const channelMap = await getChannelMap()
+  if (!channelMap) {
+    await ctx.reply('channels not found')
+    return
+  }
+
   const senderId = ctx.message.reply_to_message.from?.id
   if (!senderId) return
 

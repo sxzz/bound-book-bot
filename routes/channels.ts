@@ -1,3 +1,5 @@
-import { getChannelMap } from '~/src/channel'
+import { getChannelMap } from '~/src/db'
 
-export default eventHandler(() => getChannelMap())
+export default eventHandler(async () => {
+  return (await getChannelMap()) || 'no data'
+})
