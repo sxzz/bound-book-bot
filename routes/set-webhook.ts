@@ -1,4 +1,4 @@
-import { SECRET_HASH } from '~/src/utils'
+import { SECRET_HASH } from '~/src/env'
 import { bot, commands } from '../src'
 
 export default eventHandler(async (evt) => {
