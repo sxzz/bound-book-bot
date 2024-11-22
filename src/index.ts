@@ -1,5 +1,6 @@
-import { Telegraf, Context } from 'telegraf'
-import { Update, Message } from 'telegraf/types'
+import process from 'node:process'
+import { Telegraf, type Context } from 'telegraf'
+import type { Message, Update } from 'telegraf/types'
 
 let channelMap: Record<string, number> | undefined
 
@@ -21,7 +22,7 @@ const post = async (
   ctx: Context<{
     message: Update.New & Update.NonChannel & Message.TextMessage
     update_id: number
-  }>
+  }>,
 ) => {
   if (!channelMap) {
     await ctx.reply('initializing...')
@@ -43,18 +44,18 @@ const post = async (
     const { message_id, chat } = await bot.telegram.forwardMessage(
       channelId,
       ctx.message.chat.id,
-      ctx.message.reply_to_message.message_id
+      ctx.message.reply_to_message.message_id,
     )
 
     const link = `https://t.me/c/${removeChannelIdPrefix(
-      chat.id
+      chat.id,
     )}/${message_id}`
     await ctx.replyWithMarkdownV2(
-      `投稿成功，这是第 ${message_id} 页。[阅读](${link})`
+      `投稿成功，这是第 ${message_id} 页。[阅读](${link})`,
     )
-  } catch (err) {
-    console.error(err)
-    await ctx.replyWithMarkdownV2(`投稿失败\n\`\`\`\n${err}\n\`\`\``)
+  } catch (error) {
+    console.error(error)
+    await ctx.replyWithMarkdownV2(`投稿失败\n\`\`\`\n${error}\n\`\`\``)
   }
 }
 bot.hears('投稿', post)
@@ -62,7 +63,7 @@ bot.command('post', post)
 
 bot.hears('按个指纹', async (ctx) => {
   await ctx.replyWithMarkdownV2(
-    `\`\`\`\n${JSON.stringify(ctx.message, undefined, 2)}\n\`\`\``
+    `\`\`\`\n${JSON.stringify(ctx.message, undefined, 2)}\n\`\`\``,
   )
 })
 

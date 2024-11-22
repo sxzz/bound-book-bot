@@ -5,7 +5,7 @@ export default eventHandler(async (evt) => {
   try {
     const result = await bot.telegram.getChat(query.chat_id as string)
     return result
-  } catch (err) {
-    return err
+  } catch (error) {
+    return error
   }
 })
