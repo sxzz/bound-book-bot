@@ -12,6 +12,6 @@
   - `BOT_TOKEN`: Telegram bot token
   - `UPSTASH_REDIS_REST_URL`: 从 Upstash 的 REST API 获取
   - `UPSTASH_REDIS_REST_TOKEN`: 从 Upstash 的 REST API 获取
-  - `SECRET_HASH`: 自行生成一个随机字符串，用于验证 webhook 请求的合法性
+  - `TOKEN`: 自行生成一个随机字符串，用于验证 webhook 请求的合法性
 
 具体部署步骤参考 https://github.com/sxzz/telegram-bot-starter
