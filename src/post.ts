@@ -9,37 +9,34 @@ export async function post(
     update_id: number
   }>,
 ) {
-  if (!ctx.message?.reply_to_message) {
-    await ctx.reply('请在引用回复中使用此命令')
-    return
-  }
-
-  const senderId = ctx.message.reply_to_message.from?.id
-  if (!senderId) return
-
-  const channelId = await getChannelIdByUser(senderId)
-  if (!channelId) {
-    await ctx.reply('channel not found')
-    return
-  }
-
   try {
+    const senderId = ctx.message.reply_to_message?.from?.id
+    if (!ctx.message.reply_to_message || !senderId) {
+      await ctx.reply('请在引用回复中使用此命令')
+      return
+    }
+
+    const channelId = await getChannelIdByUser(senderId)
+    if (!channelId) {
+      await ctx.reply('该用户没有绑定频道')
+      return
+    }
+
     const originalChatId = ctx.message.chat.id
-    const originalMessageId = ctx.message.reply_to_message.message_id
-    const { message_id, chat } = await bot.telegram.forwardMessage(
-      channelId,
-      originalChatId,
-      originalMessageId,
-    )
+    const originalMsgId = ctx.message.reply_to_message.message_id
+    const { message_id: msgId, chat: channelChat } =
+      await bot.telegram.forwardMessage(
+        channelId,
+        originalChatId,
+        originalMsgId,
+      )
 
-    const link = `https://t.me/c/${removeChannelIdPrefix(
-      chat.id,
-    )}/${message_id}`
+    const link = `https://t.me/c/${removeChannelIdPrefix(channelChat.id)}/${msgId}`
     await ctx.replyWithMarkdownV2(
-      `投稿成功，这是第 ${message_id} 页。[阅读](${link})`,
+      `投稿成功，这是第 ${msgId} 页。[阅读](${link})`,
     )
 
-    await bot.telegram.setMessageReaction(originalChatId, originalMessageId, [
+    await bot.telegram.setMessageReaction(originalChatId, originalMsgId, [
       { type: 'emoji', emoji: '🔥' },
     ])
   } catch (error) {
