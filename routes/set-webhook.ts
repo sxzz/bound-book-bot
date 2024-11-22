@@ -1,5 +1,5 @@
 import process from 'node:process'
-import { bot } from '../src'
+import { bot, commands } from '../src'
 
 const SECRET_HASH = process.env.SECRET_HASH!
 
@@ -13,6 +13,8 @@ export default eventHandler(async (evt) => {
   const webhookUrl = `https://${host}/telegram-hook?secret_hash=${SECRET_HASH}`
   const isSet = await bot.telegram.setWebhook(webhookUrl)
   const info = await bot.telegram.getWebhookInfo()
+  await bot.telegram.setMyCommands(commands)
+
   return `Set webhook to ${webhookUrl.replaceAll(
     SECRET_HASH,
     '*',

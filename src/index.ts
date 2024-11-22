@@ -1,6 +1,6 @@
 import process from 'node:process'
 import { Telegraf, type Context } from 'telegraf'
-import type { Message, Update } from 'telegraf/types'
+import type { BotCommand, Message, Update } from 'telegraf/types'
 
 let channelMap: Record<string, number> | undefined
 
@@ -66,6 +66,17 @@ bot.hears('按个指纹', async (ctx) => {
     `\`\`\`\n${JSON.stringify(ctx.message, undefined, 2)}\n\`\`\``,
   )
 })
+
+export const commands: BotCommand[] = [
+  { command: 'start', description: '使用说明' },
+  { command: 'post', description: '投稿' },
+]
+const helpMsg = commands
+  .map(({ command, description }) => `/${command} - ${description}`)
+  .join('\n')
+
+bot.start((ctx) => ctx.reply(helpMsg))
+bot.help((ctx) => ctx.reply(helpMsg))
 
 function removeChannelIdPrefix(channelId: number) {
   return String(channelId).slice(4)
