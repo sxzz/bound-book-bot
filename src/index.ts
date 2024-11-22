@@ -1,7 +1,7 @@
 import { Telegraf } from 'telegraf'
+import { fingerprint } from './commands/fingerprint'
+import { post } from './commands/post'
 import { BOT_TOKEN } from './env'
-import { fingerprint } from './fingerprint'
-import { post } from './post'
 import type { BotCommand } from 'telegraf/types'
 
 export const bot = new Telegraf(BOT_TOKEN)

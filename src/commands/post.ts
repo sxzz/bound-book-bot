@@ -1,5 +1,5 @@
-import { getChannelIdByUser } from './db'
-import { bot } from './index'
+import { getChannelIdByUser } from '../db'
+import { bot } from '../index'
 import type { Context } from 'telegraf'
 import type { Message, Update } from 'telegraf/types'
 
