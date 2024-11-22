@@ -1,4 +1,5 @@
-import { bot } from '../src'
+import { bot } from '~/src'
+import { sendJson } from '~/src/utils'
 
 export default eventHandler(async (evt) => {
   const query = getQuery(evt)
@@ -9,6 +10,6 @@ export default eventHandler(async (evt) => {
   try {
     return await bot.telegram.getChat(chatId)
   } catch (error) {
-    return error
+    return sendJson(evt, error)
   }
 })

@@ -1,4 +1,5 @@
-import { bot } from '../src'
+import { bot } from '~/src'
+import { parseMsgUrl, sendJson } from '~/src/utils'
 
 export default eventHandler(async (evt) => {
   const query = getQuery(evt)
@@ -8,11 +9,7 @@ export default eventHandler(async (evt) => {
   let msgId: number
 
   if (typeof url === 'string') {
-    // https://t.me/c/[chatId]/[msgId]
-    const urlObj = new URL(url)
-    const paths = urlObj.pathname.split('/')
-    chatId = `-100${paths[2]}`
-    msgId = +paths[3]
+    ;[chatId, msgId] = parseMsgUrl(url)
   } else {
     if (typeof query.chat_id !== 'string') return 'invalid chat_id'
     chatId = query.chat_id
@@ -23,6 +20,6 @@ export default eventHandler(async (evt) => {
   try {
     return await bot.telegram.deleteMessage(chatId, msgId)
   } catch (error) {
-    return error
+    return sendJson(evt, error)
   }
 })

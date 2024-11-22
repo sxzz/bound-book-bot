@@ -1,3 +1,4 @@
+import { sendJson } from '~/src/utils'
 import { bot } from '../src'
 
 export default eventHandler(async (evt) => {
@@ -9,6 +10,6 @@ export default eventHandler(async (evt) => {
     const result = await bot.telegram.leaveChat(chatId)
     return result ? 'success' : 'fail'
   } catch (error) {
-    return error
+    return sendJson(evt, error)
   }
 })
