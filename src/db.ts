@@ -11,8 +11,14 @@ const redis = new Redis({
 
 export async function getChannelMap() {
   channelMapCache ||=
-    (await redis.get<Record<string, number>>('book:channels')) || undefined
+    (await redis.json.get<Record<string, number>>('book:channels')) || undefined
   return channelMapCache
+}
+
+export async function getChannelIdByUser(uid: number) {
+  return (
+    await redis.json.get<number[]>('book:channels', `$.${String(uid)}`)
+  )?.[0]
 }
 
 export async function getAdminList() {
